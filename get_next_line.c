@@ -6,22 +6,47 @@
 /*   By: gmasid <gmasid@student.42.rio>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/29 15:13:17 by gmasid            #+#    #+#             */
-/*   Updated: 2022/05/29 15:26:53 by gmasid           ###   ########.fr       */
+/*   Updated: 2022/05/30 12:16:26 by gmasid           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "get_next_line.h"
+
+char	*read_file_until_find_next_line(int fd, char *work_str)
+{
+	int		read_bytes_amount;
+	char	*buff;
+
+	buff = malloc((BUFFER_SIZE + 1) * sizeof(char));
+	if (!buff)
+		return (NULL);
+	read_bytes_amount = 1;
+	while (!ft_strchr(work_str, '\n') && read_bytes_amount != 0)
+	{
+		read_bytes_amount = read(fd, buff, BUFFER_SIZE);
+		if (read_bytes_amount == -1)
+		{
+			free(buff);
+			return (NULL);
+		}
+		buff[read_bytes_amount] = '\0';
+		work_str = ft_strjoin(work_str, buff);
+	}
+	free(buff);
+	return (work_str);
+}
+
 char	*get_next_line(int fd)
 {
-	// 1:
-	// Write a function that reads a file description until he finds a char '\n'
-	// and concat what the function finds to the string you pass (aux_string)
-	// "aux_string + what the function finds"
-	////////////////////////////////////////////////////////////////////
-	// 2:
-	// Write a function that take the "aux_string" until the first \n
-	// and return this first part
-	////////////////////////////////////////////////////////////////////
-	// 3:
-	// Write a function that remove everything of "aux_string" until
-	// the first \n
+	char		*result;
+	static char	*work_str;
+
+	if (BUFFER_SIZE < 1 || fd < 0)
+		return (NULL);
+	work_str = read_file_until_find_next_line(fd, work_str);
+	if (!work_str)
+		return (NULL);
+	result = get_part_before_next_line_from_work_string(work_str);
+	work_str = get_part_after_next_line_from_work_string(work_str);
+	return (result);
 }
