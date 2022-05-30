@@ -1,3 +1,4 @@
 gnlTester
 *.a
 *.o
+*.out
