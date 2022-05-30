@@ -6,7 +6,7 @@
 /*   By: gmasid <gmasid@student.42.rio>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/30 11:06:30 by gmasid            #+#    #+#             */
-/*   Updated: 2022/05/30 12:07:18 by gmasid           ###   ########.fr       */
+/*   Updated: 2022/05/30 12:43:55 by gmasid           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ size_t	ft_strlen(char *s)
 
 char	*ft_strchr(char *s, int c)
 {
-	int	i;
+	size_t	i;
 
 	i = 0;
 	if (!s)
@@ -34,15 +34,15 @@ char	*ft_strchr(char *s, int c)
 	while (s[i] != '\0')
 	{
 		if (s[i] == (unsigned char)c)
-			return ((char *)s + i);
+			return (s + i);
 		i++;
 	}
-	if (s[i] == (unsigned char)c)
-		return ((char *)s + i);
+	if (c == '\0')
+		return (s + i);
 	return (0);
 }
 
-char	*ft_strjoin(char *work_str, char *buffer)
+char	*ft_strjoin(char *work_str, char *buff)
 {
 	char	*result;
 	size_t	i;
@@ -53,10 +53,9 @@ char	*ft_strjoin(char *work_str, char *buffer)
 		work_str = malloc(1 * sizeof(char));
 		work_str[0] = '\0';
 	}
-	if (!work_str || !buffer)
+	if (!work_str || !buff)
 		return (NULL);
-	result = malloc(sizeof(char) * (ft_strlen(work_str) + ft_strlen(buffer)
-				+ 1));
+	result = malloc(sizeof(char) * (ft_strlen(work_str) + ft_strlen(buff) + 1));
 	if (!result)
 		return (NULL);
 	i = -1;
@@ -64,9 +63,9 @@ char	*ft_strjoin(char *work_str, char *buffer)
 		while (work_str[++i])
 			result[i] = work_str[i];
 	j = 0;
-	while (buffer[j])
-		result[i++] = buffer[j++];
-	result[ft_strlen(work_str) + ft_strlen(buffer)] = '\0';
+	while (buff[j])
+		result[i++] = buff[j++];
+	result[ft_strlen(work_str) + ft_strlen(buff)] = '\0';
 	free(work_str);
 	return (result);
 }
@@ -113,12 +112,14 @@ char	*get_part_after_next_line_from_work_string(char *work_str)
 		free(work_str);
 		return (NULL);
 	}
-	result = malloc(sizeof(char) * (ft_strlen(work_str) - (i + 1)));
-	i++;
+	result = malloc(sizeof(char) * (ft_strlen(work_str) - i + 1));
+	if (!result)
+		return (NULL);
 	j = 0;
+	i++;
 	while (work_str[i])
 		result[j++] = work_str[i++];
-	result[i] = '\0';
+	result[j] = '\0';
 	free(work_str);
 	return (result);
 }
