@@ -36,8 +36,9 @@ int	main(void)
 	int	fd;
 
 	fd = open("file.txt", O_RDONLY);
-	printf("%s", get_next_line(fd));
-	printf("%s", get_next_line(fd));
+	printf("%s", get_next_line(fd)); // this is the first line
+	printf("%s", get_next_line(fd)); // this is the second line
+	printf("%s", get_next_line(fd)); // how many times you gonna call me?
 	close(fd);
 }
 ```
